@@ -22,6 +22,8 @@ jobs:
         with:
           packages: 'platform-tools'
       - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
       - name: Install SDK
         run: sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'
       - name: Cache pinned Miuix preview
