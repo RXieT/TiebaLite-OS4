@@ -29,7 +29,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository/top/yukonga/miuix
-          key: miuix-android-ea1b935-v1
+          key: miuix-android-ea1b935-v2
       - name: Build official OS4 preview from pinned source
         if: steps.miuix-cache.outputs.cache-hit != 'true'
         shell: bash
@@ -37,6 +37,8 @@ jobs:
           git clone https://github.com/compose-miuix-ui/miuix.git "$RUNNER_TEMP/miuix"
           cd "$RUNNER_TEMP/miuix"
           git checkout ea1b935ddba7bb25de816342b2e7a4ad2113bb46
+          git config core.abbrev 7
+          test "$(git rev-parse --short HEAD)" = ea1b935
           chmod +x gradlew
           printf '\nnetworkTimeout=120000\nretries=3\n' >> gradle/wrapper/gradle-wrapper.properties
           tasks=()
@@ -53,7 +55,9 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ~/.m2/repository/top/yukonga/miuix
-          key: miuix-android-ea1b935-v1
+          key: miuix-android-ea1b935-v2
+      - name: Verify preview coordinates
+        run: test -f "$HOME/.m2/repository/top/yukonga/miuix/kmp/miuix-glass/0.9.4-ea1b935-SNAPSHOT/miuix-glass-0.9.4-ea1b935-SNAPSHOT.pom"
       - name: Build installable APK
         shell: bash
         run: |
