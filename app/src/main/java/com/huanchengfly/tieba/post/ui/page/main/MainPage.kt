@@ -116,6 +116,7 @@ import com.huanchengfly.tieba.post.core.designsystem.component.navigationsuite.T
 import com.huanchengfly.tieba.post.core.designsystem.component.navigationsuite.TbNavigationSuiteScaffoldState.Companion.rememberNavigationSuiteScaffoldState
 import com.huanchengfly.tieba.post.core.designsystem.component.navigationsuite.TbNavigationSuiteType
 import com.huanchengfly.tieba.post.core.designsystem.component.navigationsuite.TbNavigationSuiteType.Companion.toNavigationSuiteType
+import com.huanchengfly.tieba.post.core.designsystem.component.navigationsuite.TbNavigationSuiteType.Companion.isFloatingNavigationBar
 import com.huanchengfly.tieba.post.core.designsystem.component.navigationsuite.calculateNavigationType
 import com.huanchengfly.tieba.post.core.designsystem.component.navigationsuite.navigationSuiteScaffoldConsumeWindowInsets
 import com.huanchengfly.tieba.post.core.designsystem.component.vibrantFloatingNavigationBarColor
@@ -146,6 +147,9 @@ import com.huanchengfly.tieba.post.ui.widgets.compose.DefaultBackToTopFAB
 import com.huanchengfly.tieba.post.ui.widgets.compose.Sizes
 import com.huanchengfly.tieba.post.ui.widgets.compose.TbHazeState
 import com.huanchengfly.tieba.post.ui.widgets.compose.rememberTbHazeState
+import com.huanchengfly.tieba.post.ui.widgets.compose.os4Glass
+import top.yukonga.miuix.kmp.blur.layerBackdrop
+import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
 import com.huanchengfly.tieba.post.utils.LocalAccount
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -402,16 +406,22 @@ private fun MainNavigationSuiteScaffold(
 ) {
     val mainNavSuiteType = state.layoutType
     val navigationSuiteType = mainNavSuiteType.toNavigationSuiteType()
+    val uiSettings = LocalUISettings.current
+    val useOS4 = uiSettings.glassEnabled && !uiSettings.reduceEffect && hazeState != null
+    val backdrop = rememberLayerBackdrop()
 
     NavigationSuiteScaffoldLayout(
         modifier = modifier,
         navigationSuite = {
             TbNavigationSuite(
                 tbNavigationSuiteType = mainNavSuiteType,
-                modifier = Modifier
-                    .withNonNull(hazeState?.takeIf { mainNavSuiteType.isNavigationBar }) {
+                modifier = if (useOS4 && mainNavSuiteType.isNavigationBar && state.currentValue.isVisible) {
+                    Modifier.os4Glass(backdrop, rounded = mainNavSuiteType.isFloatingNavigationBar)
+                } else {
+                    Modifier.withNonNull(hazeState?.takeIf { mainNavSuiteType.isNavigationBar }) {
                         Modifier.defaultHazeEffect { blurEnabled = state.currentValue.isVisible }
-                    },
+                    }
+                },
                 railState = navigationRailState,
                 colors = navigationSuiteColors,
                 verticalArrangement = navigationVerticalArrangement,
@@ -430,7 +440,7 @@ private fun MainNavigationSuiteScaffold(
                     navigationSuiteType,
                     navigationBarAtop,
                     state,
-                ),
+                ).then(if (useOS4) Modifier.layerBackdrop(backdrop) else Modifier),
             ) {
                 content()
             }

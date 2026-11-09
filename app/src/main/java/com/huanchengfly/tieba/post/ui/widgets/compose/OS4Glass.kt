@@ -26,6 +26,11 @@ internal fun OS4BarSurface(
     rounded: Boolean = false,
     content: @Composable () -> Unit,
 ) {
+    Box(Modifier.os4Glass(backdrop, rounded)) { content() }
+}
+
+@Composable
+internal fun Modifier.os4Glass(backdrop: Backdrop?, rounded: Boolean = false): Modifier {
     val settings = LocalUISettings.current
     val surface = MiuixTheme.colorScheme.background
     val base = GlassDefaults.Style
@@ -34,8 +39,7 @@ internal fun OS4BarSurface(
         background = base.background.copy(saturation = settings.glassSaturation),
         refract = base.refract.copy(ior = 1f + settings.glassRefraction),
     )
-    Box(
-        Modifier.glassPanel(
+    return this.glassPanel(
             backdrop = backdrop,
             shape = GlassShape(if (rounded) 28.dp else 0.dp),
             style = style,
@@ -66,6 +70,5 @@ internal fun OS4BarSurface(
                     }
                 }
             }
-        },
-    ) { content() }
+        }
 }
