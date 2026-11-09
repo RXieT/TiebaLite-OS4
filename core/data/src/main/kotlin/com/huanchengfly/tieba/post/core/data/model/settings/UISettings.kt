@@ -44,4 +44,11 @@ data class UISettings(
     val setupFinished: Boolean = false,
     val homeForumList: Boolean = false,
     val showHistoryInHome: Boolean = true,
+    // reduceEffect takes precedence over these glass effect settings.
+    val glassEnabled: Boolean = true,
+    val glassBlurRadius: Float = 28f, // 0..80 dp
+    val glassTintAlpha: Float = 0.35f, // 0..1
+    val glassNoise: Float = 0.05f, // 0..0.3
+    val glassRefraction: Float = 0.5f, // 0..1
+    val glassSaturation: Float = 1.2f, // 0..2
 )

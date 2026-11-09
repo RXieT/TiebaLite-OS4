@@ -37,7 +37,7 @@ internal fun Project.configureKotlinAndroid(
         compileSdk = 37
 
         defaultConfig.apply {
-            minSdk = 24
+            minSdk = 33 // Miuix OS4 glass uses Android RuntimeShader.
         }
 
         compileOptions.apply {

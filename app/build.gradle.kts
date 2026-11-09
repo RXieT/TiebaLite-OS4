@@ -16,7 +16,8 @@ android {
         applicationId = "com.huanchengfly.tieba.post"
         //noinspection OldTargetApi
         versionCode = 391086
-        versionName = "4.0.0 Beta 6"
+        versionName = "4.0.0 Beta 6 OS4 Preview"
+        applicationIdSuffix = ".os4"
 
         // Configure custom runner to set up the Hilt test application
         testInstrumentationRunner = "$applicationId.TbLiteTestRunner"
@@ -120,6 +121,7 @@ configurations.configureEach {
 }
 
 dependencies {
+    implementation("top.yukonga.miuix.kmp:miuix-glass:0.9.4-ea1b935-SNAPSHOT")
     implementation(project(":core:data"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:media"))

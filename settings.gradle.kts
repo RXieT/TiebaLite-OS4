@@ -15,6 +15,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        mavenLocal { content { includeGroup("top.yukonga.miuix.kmp") } }
         google()
         mavenCentral()
         maven("https://jitpack.io")

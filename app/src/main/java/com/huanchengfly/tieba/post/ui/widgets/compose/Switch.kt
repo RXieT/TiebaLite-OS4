@@ -52,21 +52,10 @@ fun Switch(
             }
     }
 
-    Switch(
+    top.yukonga.miuix.kmp.basic.Switch(
         checked = checked,
         onCheckedChange = onCheckedChange,
         modifier = modifier,
-        thumbContent = {
-            if (checked) {
-                Icon(
-                    imageVector = Icons.Filled.Check,
-                    contentDescription = null,
-                    modifier = Modifier.size(SwitchDefaults.IconSize),
-                )
-            }
-        },
         enabled = enabled,
-        colors = colors,
-        interactionSource = interactionSource,
     )
 }

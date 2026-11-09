@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    api("top.yukonga.miuix.kmp:miuix-ui:0.9.4-ea1b935-SNAPSHOT")
     api(project(":material-color-utilities"))
 
     api(libs.androidx.activity.compose)

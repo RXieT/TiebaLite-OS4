@@ -46,6 +46,8 @@ import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
+import top.yukonga.miuix.kmp.blur.layerBackdrop
+import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
 
 val LocalHazeState = staticCompositionLocalOf<TbHazeState?> { null }
 
@@ -179,6 +181,9 @@ fun BlurScaffold(
 ) {
     if (isHazeBlurEnabled()) {
         val hazeState = rememberTbHazeState()
+        val glassEnabled = LocalUISettings.current.glassEnabled
+        // Capture only scrolling content, never the bars sampling it (no recursive layers).
+        val backdrop = rememberLayerBackdrop()
 
         CompositionLocalProvider(
             LocalSnackbarHostState provides snackbarHostState,
@@ -187,12 +192,16 @@ fun BlurScaffold(
             Scaffold(
                 modifier = modifier,
                 topBar = {
-                    hazeState.HazeBox(content = topBar, hazeBlock = topHazeBlock)
+                    if (glassEnabled) OS4BarSurface(backdrop = backdrop, content = topBar)
+                    else hazeState.HazeBox(content = topBar, hazeBlock = topHazeBlock)
                 },
                 bottomBar = if (bottomBar === BlurNavigationBarPlaceHolder) {
                     bottomBar
                 } else {
-                    { hazeState.HazeBox(content = bottomBar, hazeBlock = bottomHazeBlock) }
+                    {
+                        if (glassEnabled) OS4BarSurface(backdrop = backdrop, rounded = true, content = bottomBar)
+                        else hazeState.HazeBox(content = bottomBar, hazeBlock = bottomHazeBlock)
+                    }
                 },
                 snackbarHost = snackbarHost,
                 floatingActionButton = floatingActionButton,
@@ -200,7 +209,9 @@ fun BlurScaffold(
                 containerColor = backgroundColor,
                 contentColor = contentColor
             ) { paddingValues ->
-                Box(modifier = Modifier.hazeSource(hazeState.state)) {
+                Box(modifier = Modifier.hazeSource(hazeState.state).then(
+                    if (glassEnabled) Modifier.layerBackdrop(backdrop) else Modifier
+                )) {
                     content(paddingValues)
                 }
             }

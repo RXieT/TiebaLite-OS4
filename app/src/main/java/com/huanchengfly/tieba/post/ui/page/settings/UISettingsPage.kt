@@ -24,6 +24,10 @@ import androidx.compose.material.icons.outlined.ViewAgenda
 import androidx.compose.material.icons.outlined.ViewColumn
 import androidx.compose.material.icons.outlined.WatchLater
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -48,6 +52,10 @@ fun UISettingsPage(
     onNavigateAppFont: () -> Unit,
 ) {
     val context = LocalContext.current
+    var showBlurTuning by rememberSaveable { mutableStateOf(false) }
+    if (showBlurTuning) {
+        BlurTuningDialog(settings = settings, onDismissRequest = { showBlurTuning = false })
+    }
     val toyFansIcon = AnimatedImageVector.animatedVectorResource(R.drawable.ic_animated_toy_fans)
 
     SettingsScaffold(
@@ -67,6 +75,14 @@ fun UISettingsPage(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 reduceEffectPreference()
             }
+
+            preference(
+                title = R.string.blur_tuning_title,
+                summary = R.string.blur_tuning_summary,
+                leadingIcon = Icons.Outlined.BlurOn,
+                trailingIcon = TbIcons.KeyboardArrowRight,
+                onClick = { showBlurTuning = true },
+            )
 
             toggleablePreference(
                 property = UISettings::reduceMotion,

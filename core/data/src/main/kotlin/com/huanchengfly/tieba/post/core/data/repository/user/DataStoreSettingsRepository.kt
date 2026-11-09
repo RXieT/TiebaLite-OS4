@@ -219,6 +219,11 @@ private object ThemeSettingsTransformer : PreferenceTransformer<ThemeSettings> {
 
 private object UISettingsTransformer: PreferenceTransformer<UISettings> {
 
+    private val defaults = UISettings()
+
+    private fun Float?.validated(default: Float, max: Float): Float =
+        this?.takeIf { it.isFinite() }?.coerceIn(0f, max) ?: default
+
     val isShippingApiBelowS by unsafeLazy {
         SystemPropertyUtil.getInt("ro.product.first_api_level", default = Build.VERSION.SDK_INT) < Build.VERSION_CODES.S
     }
@@ -242,6 +247,12 @@ private object UISettingsTransformer: PreferenceTransformer<UISettings> {
             setupFinished = it[booleanPreferencesKey(KEY_SETUP_FINISHED)] == true,
             homeForumList = it[booleanPreferencesKey(KEY_HOME_SINGLE_FORUM_LIST)] == true,
             showHistoryInHome = it[booleanPreferencesKey(KEY_HOME_PAGE_SHOW_HISTORY)] ?: true,
+            glassEnabled = it[booleanPreferencesKey(KEY_GLASS_ENABLED)] ?: defaults.glassEnabled,
+            glassBlurRadius = it[floatPreferencesKey(KEY_GLASS_BLUR_RADIUS)].validated(defaults.glassBlurRadius, 80f),
+            glassTintAlpha = it[floatPreferencesKey(KEY_GLASS_TINT_ALPHA)].validated(defaults.glassTintAlpha, 1f),
+            glassNoise = it[floatPreferencesKey(KEY_GLASS_NOISE)].validated(defaults.glassNoise, 0.3f),
+            glassRefraction = it[floatPreferencesKey(KEY_GLASS_REFRACTION)].validated(defaults.glassRefraction, 1f),
+            glassSaturation = it[floatPreferencesKey(KEY_GLASS_SATURATION)].validated(defaults.glassSaturation, 2f),
         )
     }
 
@@ -259,6 +270,12 @@ private object UISettingsTransformer: PreferenceTransformer<UISettings> {
         it[booleanPreferencesKey(KEY_SETUP_FINISHED)] = ui.setupFinished
         it[booleanPreferencesKey(KEY_HOME_SINGLE_FORUM_LIST)] = ui.homeForumList
         it[booleanPreferencesKey(KEY_HOME_PAGE_SHOW_HISTORY)] = ui.showHistoryInHome
+        it[booleanPreferencesKey(KEY_GLASS_ENABLED)] = ui.glassEnabled
+        it[floatPreferencesKey(KEY_GLASS_BLUR_RADIUS)] = ui.glassBlurRadius.validated(defaults.glassBlurRadius, 80f)
+        it[floatPreferencesKey(KEY_GLASS_TINT_ALPHA)] = ui.glassTintAlpha.validated(defaults.glassTintAlpha, 1f)
+        it[floatPreferencesKey(KEY_GLASS_NOISE)] = ui.glassNoise.validated(defaults.glassNoise, 0.3f)
+        it[floatPreferencesKey(KEY_GLASS_REFRACTION)] = ui.glassRefraction.validated(defaults.glassRefraction, 1f)
+        it[floatPreferencesKey(KEY_GLASS_SATURATION)] = ui.glassSaturation.validated(defaults.glassSaturation, 2f)
     }
 
     private const val KEY_APP_ICON = "app_icon"
@@ -279,6 +296,12 @@ private object UISettingsTransformer: PreferenceTransformer<UISettings> {
     private const val KEY_REDUCE_MOTION = "ui_reduce_motion"
     private const val KEY_HOME_SINGLE_FORUM_LIST = "ui_forum_list_in_home"
     private const val KEY_HOME_PAGE_SHOW_HISTORY = "ui_history_in_home"
+    private const val KEY_GLASS_ENABLED = "ui_glass_enabled"
+    private const val KEY_GLASS_BLUR_RADIUS = "ui_glass_blur_radius"
+    private const val KEY_GLASS_TINT_ALPHA = "ui_glass_tint_alpha"
+    private const val KEY_GLASS_NOISE = "ui_glass_noise"
+    private const val KEY_GLASS_REFRACTION = "ui_glass_refraction"
+    private const val KEY_GLASS_SATURATION = "ui_glass_saturation"
 }
 
 private object BlockTransformer: PreferenceTransformer<BlockSettings> {

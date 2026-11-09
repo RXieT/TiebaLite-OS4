@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="blur_tuning_title">OS4 模糊精调</string>
+    <string name="blur_tuning_summary">调整玻璃效果、模糊半径、染色、噪点、折射与饱和度</string>
+    <string name="blur_tuning_priority">调整会实时保存。减弱模糊效果（reduceEffect）优先于玻璃效果开关及以下参数；恢复默认仅重置此处六项设置，不改变减弱模糊效果及其他设置。</string>
+    <string name="blur_tuning_reduced">当前已开启减弱模糊效果，玻璃效果受其限制；仍可保存精调参数。</string>
+    <string name="blur_tuning_enabled">启用玻璃效果</string>
+    <string name="blur_tuning_radius">模糊半径</string>
+    <string name="blur_tuning_tint">染色透明度</string>
+    <string name="blur_tuning_noise">噪点强度</string>
+    <string name="blur_tuning_refraction">折射强度</string>
+    <string name="blur_tuning_saturation">饱和度</string>
+    <string name="blur_tuning_value">%1$.2f</string>
+    <string name="blur_tuning_value_dp">%1$.2f dp</string>
+    <string name="blur_tuning_reset">恢复默认</string>
+    <string name="blur_tuning_close">完成</string>
+</resources>

@@ -48,7 +48,16 @@ fun TiebaLiteTheme(
             motionScheme = motionScheme,
             shapes = shapes,
             typography = typography,
-            content = content
+            content = {
+                top.yukonga.miuix.kmp.theme.MiuixTheme(
+                    colors = if (colorSchemeExt.darkTheme) {
+                        top.yukonga.miuix.kmp.theme.darkColorScheme()
+                    } else {
+                        top.yukonga.miuix.kmp.theme.lightColorScheme()
+                    },
+                    content = content,
+                )
+            }
         )
     }
 }
