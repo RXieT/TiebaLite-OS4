@@ -43,10 +43,21 @@ jobs:
             tasks+=(":$m:publishKotlinMultiplatformPublicationToMavenLocal" ":$m:publishAndroidPublicationToMavenLocal")
           done
           ./gradlew "${tasks[@]}" --no-daemon --no-parallel --no-configuration-cache --stacktrace
+      - name: Save compiled Miuix before application build
+        if: steps.miuix-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.m2/repository/top/yukonga/miuix
+          key: miuix-android-ea1b935-v1
       - name: Build installable APK
+        shell: bash
         run: |
           chmod +x gradlew
-          ./gradlew :app:assembleDebug --no-daemon --stacktrace
+          for attempt in 1 2 3; do
+            if ./gradlew :app:assembleDebug --no-daemon --stacktrace; then exit 0; fi
+            echo "Build attempt $attempt failed; retrying transient dependency downloads."
+          done
+          exit 1
       - name: Upload signed debug APK
         uses: actions/upload-artifact@v4
         with:

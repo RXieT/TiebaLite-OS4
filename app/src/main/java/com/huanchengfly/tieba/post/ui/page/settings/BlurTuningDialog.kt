@@ -39,6 +39,7 @@ fun BlurTuningDialog(settings: Settings<UISettings>, onDismissRequest: () -> Uni
                 modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
+                BlurPreview(currentPreference)
                 Text(stringResource(R.string.blur_tuning_priority))
                 if (currentPreference.reduceEffect) {
                     Text(

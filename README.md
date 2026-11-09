@@ -1,4 +1,6 @@
-# <p align="center">Tieba Lite</p>
+# <p align="center">Tieba Lite · OS4 Preview</p>
+
+本分支基于完整 TiebaLite 维护线接入 Miuix OS4 预览玻璃材质与模糊精调，使用 GitHub Actions 构建。版本、迁移范围及安装说明见 [OS4.md](OS4.md)。
 <div align="center">
     <a href="https://github.com/0ranko0P/TiebaLite/blob/main/LICENSE">
         <img alt="License" src="https://img.shields.io/github/license/0ranko0P/TiebaLite">
